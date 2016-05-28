@@ -63,3 +63,6 @@ target/
 
 oldlines.txt
 setenv.sh
+
+nimbix/nimbix.yaml
+

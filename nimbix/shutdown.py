@@ -3,14 +3,13 @@ Usage:
   launch.py [options]
 
 Options:
-  --username username    username
-  --apikey APIKEY    apikey
   --image IMAGE      image
 """
 
 from __future__ import print_function
 import sys, os, subprocess
 import requests
+import yaml
 import json
 from docopt import docopt
 
@@ -18,13 +17,13 @@ api_url = 'https://api.jarvice.com/jarvice'
 ssh_path = '/usr/bin/ssh'
 
 args = docopt(__doc__)
-username = args['--username']
-apikey = args['--apikey']
 image = args['--image']
 
-if username == '' or apikey == '' or username is None or apikey is None:
-  print('please provide apikey, username')
-  sys.exit(1)
+with open('nimbix/nimbix.yaml', 'r') as f:
+  config = yaml.load(f)
+
+username = config['username']
+apikey = config['apikey']
 
 if image == '' or image is None:
   print('please provide image name')

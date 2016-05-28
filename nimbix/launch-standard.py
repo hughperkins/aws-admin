@@ -1,26 +1,23 @@
 """
 Usage:
-  launch.py [options]
-
-Options:
-  --username username    username
-  --apikey APIKEY    apikey
+  launch.py
 """
 
 from __future__ import print_function
 import sys
+import yaml
 import requests
 from docopt import docopt
 
 api_url = 'https://api.jarvice.com/jarvice'
 
 args = docopt(__doc__)
-username = args['--username']
-apikey = args['--apikey']
 
-if username == '' or apikey == '' or username is None or apikey is None:
-  print('please provide apikey and username')
-  sys.exit(1)
+with open('nimbix/nimbix.yaml', 'r') as f:
+  config = yaml.load(f)
+
+username = config['username']
+apikey = config['apikey']
 
 launch_data = {
   "machine": {
