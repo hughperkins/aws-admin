@@ -25,7 +25,7 @@ if username == '' or apikey == '' or username is None or apikey is None:
 launch_data = {
   "machine": {
     "nodes": "1",
-    "type": "ng0"
+    "type": "ngd3"
   },
   "vault": {
     "readonly": False,
@@ -38,7 +38,7 @@ launch_data = {
   },
   "nae": {
     "force": False,
-    "name": "foo",
+    "name": "foo2",
     "geometry": "1904x881",
     "ephemeral": False,
     "staging": True,
