@@ -8,6 +8,7 @@ import os.path
 import yaml
 import json
 import subprocess
+import checkchanges
 
 script_dir = path.dirname(path.realpath(__file__))
 # print('script_dir', script_dir)
@@ -17,8 +18,7 @@ contents = subprocess.check_output([
   'ec2',
   'describe-instances',
   '--filters', 'Name=instance-state-code,Values=16'
-])
-
+]).decode('utf-8')
 data = json.loads(contents)
 
 instanceInfos = []
@@ -35,21 +35,7 @@ for res in data['Reservations']:
         instanceInfo['name'] = str(tag['Value'])
     instanceInfos.append( instanceInfo )
 
-newString = yaml.safe_dump(instanceInfos, default_flow_style = False )
-
-oldString = ''
-if os.path.isfile(join(script_dir, 'oldlines.txt')):
-    f = open(join(script_dir, 'oldlines.txt'),'r')
-    oldString = f.read()
-    f.close()
-
-if(newString != oldString):
-   print('changed: old:')
-   print( oldString )
-   print('new:')
-   print( newString )
-   f = open(join(script_dir, '~oldlines.txt'), 'w')
-   f.write( newString )
-   f.close()
-   os.rename(join(script_dir, '~oldlines.txt'), join(script_dir, 'oldlines.txt' ))
+changesString = checkchanges.checkChanges(join(script_dir, 'oldlines.txt'), instanceInfos)
+if changesString != '':
+  print(changesString)
 
