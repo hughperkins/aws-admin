@@ -1,0 +1,9 @@
+#!/bin/bash
+
+scriptdir=$(dirname $0)
+cd ${scriptdir}
+source ./setenv.sh
+
+source ${VIRTUALENV}/bin/activate
+
+python ${scriptdir}/instances.py "$@"
