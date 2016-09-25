@@ -3,7 +3,9 @@ import subprocess
 import boto3
 import json
 import argparse
+import os
 import boto3
+import yaml
 import colorama
 from colorama import init as colorama_init, Fore
 
@@ -14,10 +16,13 @@ def get_tag(tags, key):
             return tag['Value']
 
 if __name__ == '__main__':
+    with open('config.yaml', 'r') as f:
+        config = yaml.load(f)
+
     parser = argparse.ArgumentParser()
-    parser.add_argument('--profile', default='default')
-    parser.add_argument('--region', default='virginia')
-    parser.add_argument('--prefix', default='')
+    parser.add_argument('--profile', default=os.environ.get('AWS_PROFILE', config['profile']))
+    parser.add_argument('--region', default=os.environ.get('AWS_REGION', config['default-region']))
+    parser.add_argument('--prefix', default=os.environ.get('AWS_PREFIX', ''))
     args = parser.parse_args()
 
     region_code_by_name = {
@@ -25,21 +30,13 @@ if __name__ == '__main__':
         'virginia': 'us-east-1'
     }
 
-    region_code = region_code_by_name[args.region]
+    region_code = region_code_by_name.get(args.region, args.region)
     print('region_code', region_code)
 
     colorama_init()
 
     session = boto3.Session(profile_name=args.profile, region_name=region_code)
     ec2 = session.client('ec2')
-    # ec2 = session.resource('ec2')
-    # print(dir(ec2))
-    # help(ec2)
-
-    # data = json.loads(subprocess.check_output([
-    #     'aws', '--profile', args.profile, 'ec2', 'describe-instances', '--region', args.region]).decode('utf-8'))
-    # print('data.keys()', data.keys())
-    # instances
     instance_by_name = {}
     for reserv in ec2.describe_instances()['Reservations']:
         # print('instance', instance)
@@ -65,6 +62,3 @@ if __name__ == '__main__':
                     instance.get('PrivateIpAddress', '').ljust(14))
                 outstr += color + instance['State']['Name'] + Fore.RESET
                 print(outstr)
-            # ip =
-    # print('instance[0]', instance[0])
-    # for instance in instances
