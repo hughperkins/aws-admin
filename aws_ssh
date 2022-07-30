@@ -1,0 +1,10 @@
+#!/bin/bash
+
+scriptdir=$(dirname $0)
+scriptname=$(basename $0)
+
+cd ${scriptdir}
+
+cmd=$(PYTHON=. python ${scriptdir}/${scriptname}.py "$@")
+echo ${cmd}
+${cmd}

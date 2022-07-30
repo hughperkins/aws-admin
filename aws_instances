@@ -9,4 +9,4 @@ cd ${scriptdir}
 
 # source ${VIRTUALENV}/bin/activate
 
-python ${scriptdir}/${scriptname}.py "$@"
+PYTHON=. python ${scriptdir}/${scriptname}.py "$@"

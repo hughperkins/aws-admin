@@ -7,12 +7,8 @@ import argparse
 import boto3
 import colorama
 from colorama import init as colorama_init, Fore
+import aws_common
 
-
-def get_tag(tags, key):
-    for tag in tags:
-        if tag['Key'] == key:
-            return tag['Value']
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -37,7 +33,7 @@ if __name__ == '__main__':
     for reserv in ec2.describe_instances()['Reservations']:
         # print('instance', instance)
         for instance in reserv['Instances']:
-            name = get_tag(instance['Tags'], 'Name')
+            name = aws_common.get_tag(instance['Tags'], 'Name')
             if name is None:
                 name = instance['InstanceId']
             # print(name)

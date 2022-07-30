@@ -1,12 +1,8 @@
-import subprocess
-import boto3
-import os
-import json
 import argparse
 import boto3
+import os
 import sys
-import colorama
-from colorama import init as colorama_init, Fore
+from ruamel import yaml
 import aws_common
 
 
@@ -23,9 +19,9 @@ if __name__ == '__main__':
     }
 
     region_code = region_code_by_name[args.region]
-    print('region_code', region_code)
 
-    colorama_init()
+    with open('config.yaml') as f:
+        config = yaml.safe_load(f)
 
     session = boto3.Session(profile_name=args.profile, region_name=region_code)
     ec2 = session.client('ec2')
@@ -43,6 +39,6 @@ if __name__ == '__main__':
         instance_id = instance['InstanceId']
     else:
         instance_id = args.id
-    print(instance_id)
-    ec2.start_instances(InstanceIds=[instance_id])
-    print('hopefully started')
+    key_path = config['key_path']
+    instance_ip = instance['PublicIpAddress']
+    print(f'ssh -o StrictHostKeyChecking=no -i {key_path} ubuntu@{instance_ip}')
