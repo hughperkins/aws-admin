@@ -16,6 +16,10 @@ def run_cmd(cmd):
     assert ret == 0
 
 
+def remote_cmd(key_path, instance_ip, cmd):
+    run_cmd(f'ssh -o StrictHostKeyChecking=no -i {key_path} ubuntu@{instance_ip} {cmd}')
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--profile', default=os.environ.get('AWS_PROFILE', 'default'))
@@ -56,6 +60,30 @@ if __name__ == '__main__':
     instance_ip = instance['PublicIpAddress']
     nfs_ip = config['nfs_ip']
 
-    run_cmd(f'ssh -i {key_path} ubuntu@{instance_ip} sudo apt-get install -y nfs-client')
-    run_cmd(f'ssh -i {key_path} ubuntu@{instance_ip} sudo mount {nfs_ip}:/nfs-data /persist')
-    run_cmd(f'ssh -i {key_path} ubuntu@{instance_ip} sudo hostname {args.name}')
+    init_script = f"""
+#!/bin/bash
+
+set -x
+set -e
+
+sudo apt-get install -y nfs-client
+if [[ ! -d /persist ]]; then {{
+    sudo mkdir -m 000 /persist
+}} fi
+sudo mount {nfs_ip}:/nfs-data /persist
+sudo hostname {args.name}
+
+if ! grep persist /home/ubuntu/.bashrc; then {{
+    touch /persist/.bashrc
+    cat >> /home/ubuntu/.bashrc <<EOF
+export HOME=/persist
+source /persist/.bashrc
+cd
+pwd
+EOF
+}} fi
+"""
+    with open(f'/tmp/init_{args.name}.sh', 'w') as f:
+        f.write(init_script)
+    run_cmd(f'scp -o StrictHostKeyChecking=no -i {key_path} /tmp/init_{args.name}.sh ubuntu@{instance_ip}:/tmp/init.sh')
+    run_cmd(f'ssh -o StrictHostKeyChecking=no -i {key_path} ubuntu@{instance_ip} bash /tmp/init.sh')
