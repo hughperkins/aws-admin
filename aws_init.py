@@ -66,6 +66,12 @@ if __name__ == '__main__':
 set -x
 set -e
 
+sudo apt-get update
+# dependencies for pyenv
+sudo apt-get install -y make build-essential libssl-dev zlib1g-dev \
+libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
+libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+
 sudo apt-get install -y nfs-client
 if [[ ! -d /persist ]]; then {{
     sudo mkdir -m 000 /persist
