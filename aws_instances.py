@@ -5,7 +5,7 @@ import json
 import argparse
 import os
 import boto3
-import yaml
+from ruamel import yaml
 import colorama
 from colorama import init as colorama_init, Fore
 
@@ -17,7 +17,7 @@ def get_tag(tags, key):
 
 if __name__ == '__main__':
     with open('config.yaml', 'r') as f:
-        config = yaml.load(f)
+        config = yaml.safe_load(f)
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--profile', default=os.environ.get('AWS_PROFILE', config['profile']))
