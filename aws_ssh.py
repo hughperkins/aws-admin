@@ -10,6 +10,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--profile', default=os.environ.get('AWS_PROFILE', 'default'))
     parser.add_argument('--region', default=os.environ.get('AWS_REGION', 'virginia'))
+    parser.add_argument('--tunnel-ports', type=int, nargs='+')
     parser.add_argument('--name', type=str, required=True)
     args = parser.parse_args()
 
@@ -41,4 +42,9 @@ if __name__ == '__main__':
         instance_id = args.id
     key_path = config['key_path']
     instance_ip = instance['PublicIpAddress']
-    print(f'ssh -o StrictHostKeyChecking=no -i {key_path} ubuntu@{instance_ip}')
+    tunnel_l = []
+    if args.tunnel_ports is not None:
+        for port in args.tunnel_ports:
+            tunnel_l.append(f'-L {port}:localhost:{port}')
+    tunnel_str = ' '.join(tunnel_l)
+    print(f'ssh -o StrictHostKeyChecking=no {tunnel_str} -i {key_path} ubuntu@{instance_ip}')
