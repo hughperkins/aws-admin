@@ -8,6 +8,7 @@ import sys
 import colorama
 from colorama import init as colorama_init, Fore
 import aws_common
+import aws_init
 
 
 if __name__ == '__main__':
@@ -15,6 +16,7 @@ if __name__ == '__main__':
     parser.add_argument('--profile', default=os.environ.get('AWS_PROFILE', 'default'))
     parser.add_argument('--region', default=os.environ.get('AWS_REGION', 'virginia'))
     parser.add_argument('--name', type=str, required=True)
+    parser.add_argument('--init', action='store_true')
     args = parser.parse_args()
 
     region_code_by_name = {
@@ -34,11 +36,11 @@ if __name__ == '__main__':
         for reserv in ec2.describe_instances()['Reservations']:
             # print('instance', instance)
             for instance in reserv['Instances']:
-                name = aws_common.get_tag(instance['Tags'], 'Name')
-                if name is None:
-                    name = instance['InstanceId']
+                _name = aws_common.get_tag(instance['Tags'], 'Name')
+                if _name is None:
+                    _name = instance['InstanceId']
                 # print(name)
-                instance_by_name[name] = instance
+                instance_by_name[_name] = instance
         instance = instance_by_name[args.name]
         instance_id = instance['InstanceId']
     else:
@@ -46,3 +48,6 @@ if __name__ == '__main__':
     print(instance_id)
     ec2.start_instances(InstanceIds=[instance_id])
     print('hopefully started')
+
+    if args.init:
+        aws_init.init(profile=args.profile, region=args.region, name=args.name)
