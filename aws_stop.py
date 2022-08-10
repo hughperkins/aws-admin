@@ -33,10 +33,11 @@ if __name__ == '__main__':
     for reserv in ec2.describe_instances()['Reservations']:
         # print('instance', instance)
         for instance in reserv['Instances']:
-            name = aws_common.get_tag(instance['Tags'], 'Name')
-            if name is None:
-                name = instance['InstanceId']
+            _name = aws_common.get_tag(instance['Tags'], 'Name')
+            if _name is None:
+                _name = instance['InstanceId']
             # print(name)
+            instance_by_name[_name] = instance
     instance = instance_by_name[args.name]
     instance_id = instance['InstanceId']
     print(instance_id)
