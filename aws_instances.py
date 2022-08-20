@@ -31,20 +31,27 @@ if __name__ == '__main__':
     }
 
     region_code = region_code_by_name.get(args.region, args.region)
-    print('region_code', region_code)
+    print('')
+    print(region_code + ':')
 
     colorama_init()
+
+    print(
+        'Name'.ljust(18) +
+        'State'.ljust(10) +
+        'Type'.ljust(16) +
+        # instance.get('PublicIpAddress', '').ljust(14) +
+        # instance.get('PrivateIpAddress', '').ljust(14)
+    '')
 
     session = boto3.Session(profile_name=args.profile, region_name=region_code)
     ec2 = session.client('ec2')
     instance_by_name = {}
     for reserv in ec2.describe_instances()['Reservations']:
-        # print('instance', instance)
         for instance in reserv['Instances']:
             name = get_tag(instance['Tags'], 'Name')
             if name is None:
                 name = instance['InstanceId']
-            # print(name)
             instance_by_name[name] = instance
             if name.startswith(args.prefix):
                 color = Fore.RESET
@@ -58,7 +65,11 @@ if __name__ == '__main__':
                     color = Fore.BLUE
                 outstr = (
                     color + name.ljust(18) + Fore.RESET +
-                    instance.get('PublicIpAddress', '').ljust(14) +
-                    instance.get('PrivateIpAddress', '').ljust(14))
-                outstr += color + instance['State']['Name'] + Fore.RESET
+                    color + instance['State']['Name'].ljust(10) + Fore.RESET +
+                    instance.get('InstanceType', '').ljust(16) +
+                    # instance.get('PublicIpAddress', '').ljust(14) +
+                    # instance.get('PrivateIpAddress', '').ljust(14)
+                '')
+                # outstr += color + instance['State']['Name'] + Fore.RESET
                 print(outstr)
+    print('')
