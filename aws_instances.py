@@ -49,6 +49,8 @@ if __name__ == '__main__':
     instance_by_name = {}
     for reserv in ec2.describe_instances()['Reservations']:
         for instance in reserv['Instances']:
+            if instance['State']['Name'] == 'terminated':
+                continue
             name = get_tag(instance['Tags'], 'Name')
             if name is None:
                 name = instance['InstanceId']

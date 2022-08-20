@@ -26,22 +26,10 @@ if __name__ == '__main__':
 
     session = boto3.Session(profile_name=args.profile, region_name=region_code)
     ec2 = session.client('ec2')
-    if args.name != '':
-        instance_by_name = {}
-        for reserv in ec2.describe_instances()['Reservations']:
-            # print('instance', instance)
-            for instance in reserv['Instances']:
-                name = aws_common.get_tag(instance['Tags'], 'Name')
-                if name is None:
-                    name = instance['InstanceId']
-                # print(name)
-                instance_by_name[name] = instance
-        instance = instance_by_name[args.name]
-        instance_id = instance['InstanceId']
-    else:
-        instance_id = args.id
-    key_path = config['key_path']
+    instance = aws_common.get_instance(ec2=ec2, name=args.name)
+    instance_id = instance['InstanceId']
     instance_ip = instance['PublicIpAddress']
+    key_path = config['key_path']
     tunnel_l = []
     if args.tunnel_ports is not None:
         for port in args.tunnel_ports:

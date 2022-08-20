@@ -37,26 +37,10 @@ def init(profile: str, region: str, name: str):
 
     session = boto3.Session(profile_name=profile, region_name=region_code)
     ec2 = session.client('ec2')
-    while True:
-        instance_by_name = {}
-        for reserv in ec2.describe_instances()['Reservations']:
-            # print('instance', instance)
-            for instance in reserv['Instances']:
-                _name = aws_common.get_tag(instance['Tags'], 'Name')
-                if _name is None:
-                    _name = instance['InstanceId']
-                instance_by_name[_name] = instance
-        instance = instance_by_name[name]
-        instance_id = instance['InstanceId']
-
-        key_path = config['key_path']
-        if 'PublicIpAddress' in instance:
-            instance_ip = instance['PublicIpAddress']
-            print('got public ip')
-            break
-        else:
-            print('waiting for public ip...')
-            time.sleep(3)
+    instance = aws_common.get_instance(ec2=ec2, name=name)
+    key_path = config['key_path']
+    instance_id = instance['InstanceId']
+    instance_ip = instance['PublicIpAddress']
     nfs_ip = config['nfs_ip']
 
     init_script = f"""
