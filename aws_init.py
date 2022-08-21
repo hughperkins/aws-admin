@@ -37,7 +37,14 @@ def init(profile: str, region: str, name: str):
 
     session = boto3.Session(profile_name=profile, region_name=region_code)
     ec2 = session.client('ec2')
+
     instance = aws_common.get_instance(ec2=ec2, name=name)
+    while 'PublicIpAddress' not in instance:
+        time.sleep(1)
+        instance = aws_common.get_instance(ec2=ec2, name=name)
+
+    instance_ip = instance['PublicIpAddress']
+
     key_path = config['key_path']
     instance_id = instance['InstanceId']
     instance_ip = instance['PublicIpAddress']
