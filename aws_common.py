@@ -1,3 +1,6 @@
+import time
+
+
 def get_tag(tags, key):
     for tag in tags:
         if tag['Key'] == key:
