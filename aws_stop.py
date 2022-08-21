@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
     session = boto3.Session(profile_name=args.profile, region_name=region_code)
     ec2 = session.client('ec2')
-    instance = aws_common.get_instance(ec2=ec2, name=name)
+    instance = aws_common.get_instance(ec2=ec2, name=args.name)
     instance_id = instance['InstanceId']
     print(instance_id)
     ec2.stop_instances(InstanceIds=[instance_id])

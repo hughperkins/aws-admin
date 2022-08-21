@@ -35,7 +35,7 @@ if __name__ == '__main__':
     instance_id = instance['InstanceId']
     print(instance_id)
     ec2.start_instances(InstanceIds=[instance_id])
-    print('hopefully started')
+    print('Instance starting')
 
     if args.init:
         aws_init.init(profile=args.profile, region=args.region, name=args.name)

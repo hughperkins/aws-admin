@@ -5,6 +5,7 @@ mounts nfs server
 import os
 import argparse
 import sys
+import socket
 import boto3
 import time
 import aws_common
@@ -44,6 +45,19 @@ def init(profile: str, region: str, name: str):
         instance = aws_common.get_instance(ec2=ec2, name=name)
 
     instance_ip = instance['PublicIpAddress']
+    print('got public ip', instance_ip)
+
+    connected = False
+    while not connected:
+        try:
+            socket.create_connection((instance_ip, 22), timeout=1)
+            connected = True
+        except socket.timeout as e:
+            print('waiting for server to start')
+            time.sleep(1)
+        except ConnectionRefusedError as e:
+            print('waiting for server to start')
+            time.sleep(1)
 
     key_path = config['key_path']
     instance_id = instance['InstanceId']
