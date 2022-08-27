@@ -53,11 +53,12 @@ def init(profile: str, region: str, name: str):
             socket.create_connection((instance_ip, 22), timeout=1)
             connected = True
         except socket.timeout as e:
-            print('waiting for server to start')
+            print('.', end='', flush=True)
             time.sleep(1)
         except ConnectionRefusedError as e:
-            print('waiting for server to start')
+            print('.', end='', flush=True)
             time.sleep(1)
+    print('')
 
     key_path = config['key_path']
     instance_id = instance['InstanceId']
