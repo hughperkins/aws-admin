@@ -88,9 +88,9 @@ if ! grep persist /home/ubuntu/.bashrc; then {{
     touch /persist/.bashrc
     cat >> /home/ubuntu/.bashrc <<EOF
 export HOME=/persist
-source /persist/.bashrc
 cd
 pwd
+source /persist/.bashrc
 EOF
 }} fi
 """
