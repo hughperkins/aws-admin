@@ -27,7 +27,13 @@ if __name__ == '__main__':
     session = boto3.Session(profile_name=args.profile, region_name=region_code)
     ec2 = session.client('ec2')
     instance = aws_common.get_instance(ec2=ec2, name=args.name)
+    if instance is None:
+        print(f'Instance {args.name} not found')
+        sys.exit(1)
     instance_id = instance['InstanceId']
+    if 'PublicIpAddress' not in instance:
+        print('Instance either not up, or has no public IP address')
+        sys.exit(1)
     instance_ip = instance['PublicIpAddress']
     key_path = config['key_path']
     tunnel_l = []

@@ -5,6 +5,9 @@ scriptname=$(basename $0)
 
 cd ${scriptdir}
 
-cmd=$(PYTHON=. python ${scriptdir}/${scriptname}.py "$@")
-echo ${cmd}
-${cmd}
+if cmd=$(PYTHON=. python ${scriptdir}/${scriptname}.py "$@"); then {
+    echo ${cmd}
+    ${cmd}
+} else {
+    echo ${cmd}
+} fi

@@ -17,5 +17,5 @@ def get_instance(ec2, name: str):
             if _name is None:
                 _name = instance['InstanceId']
             instance_by_name[_name] = instance
-    instance = instance_by_name[name]
+    instance = instance_by_name.get(name, None)
     return instance
