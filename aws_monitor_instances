@@ -1,0 +1,12 @@
+#!/bin/bash
+
+scriptdir=$(dirname $0)
+scriptname=$(basename $0)
+# echo ${scriptname}
+
+cd ${scriptdir}
+# source ./setenv.sh
+
+# source ${VIRTUALENV}/bin/activate
+
+PYTHON=. python ${scriptdir}/${scriptname}.py "$@"
