@@ -20,7 +20,8 @@ def run():
     with open(join(script_dir, 'config.yaml')) as f:
         config = yaml.safe_load(f)
 
-    session = boto3.Session(profile_name='default', region_name='us-east-1')
+    # session = boto3.Session(profile_name=config['profile'], region_name='us-east-1')
+    session = boto3.Session(region_name='us-east-1')
     ec2 = session.client('ec2')
 
     instanceInfos = []
