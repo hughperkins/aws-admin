@@ -15,6 +15,7 @@ if __name__ == '__main__':
     parser.add_argument('--region', default=os.environ.get('AWS_REGION', 'virginia'))
     parser.add_argument('--tunnel-ports', type=int, nargs='+')
     parser.add_argument('--name', type=str, required=True)
+    parser.add_argument('--key-path', type=str)
     args = parser.parse_args()
 
     region_code_by_name = {
@@ -38,7 +39,9 @@ if __name__ == '__main__':
         print('Instance either not up, or has no public IP address')
         sys.exit(1)
     instance_ip = instance['PublicIpAddress']
-    key_path = config['key_path']
+    key_path = args.key_path
+    if key_path is None:
+        key_path = config['key_path']
     tunnel_l = []
     if args.tunnel_ports is not None:
         for port in args.tunnel_ports:
