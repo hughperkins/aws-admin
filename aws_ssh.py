@@ -2,8 +2,11 @@ import argparse
 import boto3
 import os
 import sys
-from ruamel import yaml
+from ruamel.yaml import YAML
 import aws_common
+
+
+yaml = YAML()
 
 
 if __name__ == '__main__':
@@ -22,7 +25,7 @@ if __name__ == '__main__':
     region_code = region_code_by_name[args.region]
 
     with open('config.yaml') as f:
-        config = yaml.safe_load(f)
+        config = yaml.load(f)
 
     session = boto3.Session(profile_name=args.profile, region_name=region_code)
     ec2 = session.client('ec2')
