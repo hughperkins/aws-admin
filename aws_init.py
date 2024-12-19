@@ -26,12 +26,7 @@ def remote_cmd(key_path, instance_ip, cmd):
 
 def init(profile: str, region: str, name: str):
 
-    region_code_by_name = {
-        'tokyo': 'ap-northeast-1',
-        'virginia': 'us-east-1'
-    }
-
-    region_code = region_code_by_name[region]
+    region_code = aws_common.region_code_by_name[region]
 
     with open('config.yaml') as f:
         config = yaml.safe_load(f)

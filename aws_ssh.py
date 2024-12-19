@@ -13,17 +13,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--profile', default=os.environ.get('AWS_PROFILE', 'default'))
     parser.add_argument('--region', default=os.environ.get('AWS_REGION', 'virginia'))
-    parser.add_argument('--tunnel-ports', type=int, nargs='+')
+    parser.add_argument('--tunnel-ports', '-t', type=int, nargs='+')
     parser.add_argument('--name', type=str, required=True)
-    parser.add_argument('--key-path', type=str)
+    parser.add_argument('--key-path', '-k', type=str)
     args = parser.parse_args()
 
-    region_code_by_name = {
-        'tokyo': 'ap-northeast-1',
-        'virginia': 'us-east-1'
-    }
-
-    region_code = region_code_by_name[args.region]
+    region_code = aws_common.region_code_by_name[args.region]
 
     with open('config.yaml') as f:
         config = yaml.load(f)
@@ -47,4 +42,4 @@ if __name__ == '__main__':
         for port in args.tunnel_ports:
             tunnel_l.append(f'-L {port}:localhost:{port}')
     tunnel_str = ' '.join(tunnel_l)
-    print(f'ssh -o StrictHostKeyChecking=no {tunnel_str} -i {key_path} ubuntu@{instance_ip}')
+    print(f'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no {tunnel_str} -i {key_path} ubuntu@{instance_ip}')

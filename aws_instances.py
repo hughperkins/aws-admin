@@ -25,12 +25,7 @@ if __name__ == '__main__':
     parser.add_argument('--prefix', default=os.environ.get('AWS_PREFIX', ''))
     args = parser.parse_args()
 
-    region_code_by_name = {
-        'tokyo': 'ap-northeast-1',
-        'virginia': 'us-east-1'
-    }
-
-    region_code = region_code_by_name.get(args.region, args.region)
+    region_code = aws_common.region_code_by_name.get(args.region, args.region)
     print('')
     print(region_code + ':')
 

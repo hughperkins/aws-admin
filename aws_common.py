@@ -1,6 +1,14 @@
 import time
 
 
+region_code_by_name = {
+    'tokyo': 'ap-northeast-1',
+    'tok': 'ap-northeast-1',
+    'tk': 'ap-northeast-1',
+    'virginia': 'us-east-1'
+}
+
+
 def get_tag(tags, key):
     for tag in tags:
         if tag['Key'] == key:

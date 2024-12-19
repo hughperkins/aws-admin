@@ -19,12 +19,7 @@ if __name__ == '__main__':
     parser.add_argument('--init', action='store_true')
     args = parser.parse_args()
 
-    region_code_by_name = {
-        'tokyo': 'ap-northeast-1',
-        'virginia': 'us-east-1'
-    }
-
-    region_code = region_code_by_name[args.region]
+    region_code = aws_common.region_code_by_name[args.region]
     print('region_code', region_code)
 
     colorama_init()
