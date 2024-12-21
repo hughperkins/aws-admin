@@ -1,11 +1,8 @@
 from __future__ import print_function, unicode_literals
 
 import sys
-import os
 from os import path
 from os.path import join
-import os.path
-import yaml
 import json
 import subprocess
 import checkchanges

@@ -3,7 +3,8 @@ import boto3
 import os
 import sys
 from ruamel.yaml import YAML
-import aws_common
+
+from aws_admin import aws_common
 
 
 yaml = YAML()
@@ -14,6 +15,7 @@ if __name__ == '__main__':
     parser.add_argument('--profile', default=os.environ.get('AWS_PROFILE', 'default'))
     parser.add_argument('--region', default=os.environ.get('AWS_REGION', 'virginia'))
     parser.add_argument('--tunnel-ports', '-t', type=int, nargs='+')
+    parser.add_argument('--dynamic-port', '-d', type=int)
     parser.add_argument('--name', type=str, required=True)
     parser.add_argument('--key-path', '-k', type=str)
     args = parser.parse_args()
@@ -42,4 +44,8 @@ if __name__ == '__main__':
         for port in args.tunnel_ports:
             tunnel_l.append(f'-L {port}:localhost:{port}')
     tunnel_str = ' '.join(tunnel_l)
-    print(f'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no {tunnel_str} -i {key_path} ubuntu@{instance_ip}')
+    if args.dynamic_port:
+        tunnel_str += f" -D {args.dynamic_port}"
+    print(
+        f'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no {tunnel_str} "'
+        f'-i {key_path} ubuntu@{instance_ip}')

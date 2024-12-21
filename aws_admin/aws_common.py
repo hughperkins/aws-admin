@@ -1,6 +1,3 @@
-import time
-
-
 region_code_by_name = {
     'tokyo': 'ap-northeast-1',
     'tok': 'ap-northeast-1',

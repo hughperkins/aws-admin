@@ -1,13 +1,9 @@
 """
 This is designed to run from cron, and email you when instances start or stop
 """
-import sys
-import os
 from os import path
 from os.path import join
-import os.path
 from ruamel import yaml
-import json
 import boto3
 
 from aws_lib import check_changes, email_lib
@@ -16,9 +12,8 @@ from aws_lib import check_changes, email_lib
 def run():
     script_dir = path.dirname(path.realpath(__file__))
 
-
     with open(join(script_dir, 'config.yaml')) as f:
-        config = yaml.safe_load(f)
+        config = yaml.load(f)
 
     # session = boto3.Session(profile_name=config['profile'], region_name='us-east-1')
     session = boto3.Session(region_name='us-east-1')
@@ -38,7 +33,7 @@ def run():
             for tag in instance.get('Tags', []):
                 if str(tag['Key']) == 'Name':
                     instanceInfo['name'] = str(tag['Value'])
-            instanceInfos.append( instanceInfo )
+            instanceInfos.append(instanceInfo)
 
     changes_string = check_changes.check_changes(join(script_dir, '.monitor_cache.txt'), instanceInfos)
     if changes_string != '':

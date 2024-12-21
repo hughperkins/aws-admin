@@ -1,13 +1,14 @@
 from __future__ import print_function
-import subprocess
 import boto3
-import json
 import argparse
 import os
-import boto3
-from ruamel import yaml
-import colorama
+from ruamel.yaml import YAML
 from colorama import init as colorama_init, Fore
+
+from aws_admin import aws_common
+
+
+yaml = YAML()
 
 
 def get_tag(tags, key):
@@ -15,9 +16,10 @@ def get_tag(tags, key):
         if tag['Key'] == key:
             return tag['Value']
 
+
 if __name__ == '__main__':
     with open('config.yaml', 'r') as f:
-        config = yaml.safe_load(f)
+        config = yaml.load(f)
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--profile', default=os.environ.get('AWS_PROFILE', config['profile']))
@@ -37,7 +39,7 @@ if __name__ == '__main__':
         'Type'.ljust(16) +
         # instance.get('PublicIpAddress', '').ljust(14) +
         # instance.get('PrivateIpAddress', '').ljust(14)
-    '')
+        '')
 
     session = boto3.Session(profile_name=args.profile, region_name=region_code)
     ec2 = session.client('ec2')
@@ -66,7 +68,7 @@ if __name__ == '__main__':
                     instance.get('InstanceType', '').ljust(16) +
                     # instance.get('PublicIpAddress', '').ljust(14) +
                     # instance.get('PrivateIpAddress', '').ljust(14)
-                '')
+                    '')
                 # outstr += color + instance['State']['Name'] + Fore.RESET
                 print(outstr)
     print('')

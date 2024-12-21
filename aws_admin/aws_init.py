@@ -4,12 +4,14 @@ mounts nfs server
 
 import os
 import argparse
-import sys
 import socket
 import boto3
 import time
-import aws_common
-from ruamel import yaml
+from ruamel.yaml import YAML
+from aws_admin import aws_common
+
+
+yaml = YAML()
 
 
 def run_cmd(cmd):
@@ -29,7 +31,7 @@ def init(profile: str, region: str, name: str):
     region_code = aws_common.region_code_by_name[region]
 
     with open('config.yaml') as f:
-        config = yaml.safe_load(f)
+        config = yaml.load(f)
 
     session = boto3.Session(profile_name=profile, region_name=region_code)
     ec2 = session.client('ec2')

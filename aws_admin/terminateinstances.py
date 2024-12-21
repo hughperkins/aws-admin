@@ -1,15 +1,11 @@
 """
 terminate all instances not in allowed_instances.yaml file
 """
-
-from __future__ import print_function, unicode_literals
-
 import sys
-import os
 from os import path
 from os.path import join
-import os.path
-import yaml
+from typing import Any
+from ruamel import yaml
 import json
 import subprocess
 
@@ -35,7 +31,7 @@ regions = [
 ]
 # print('regions', regions)
 
-instances = []
+instances: list[Any] = []
 for region in regions:
     # print('region', region)
     contents = subprocess.check_output([

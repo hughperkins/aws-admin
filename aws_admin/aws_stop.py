@@ -1,22 +1,16 @@
-import subprocess
+from __future__ import print_function
 import boto3
 import os
-import json
 import argparse
-import boto3
-import sys
-import colorama
-from colorama import init as colorama_init, Fore
-import aws_common
-import aws_init
+from colorama import init as colorama_init
+from aws_admin import aws_common
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--profile', default=os.environ.get('AWS_PROFILE', 'default'))
     parser.add_argument('--region', default=os.environ.get('AWS_REGION', 'virginia'))
-    parser.add_argument('--name', type=str, required=True)
-    parser.add_argument('--init', action='store_true')
+    parser.add_argument('--name', required=True)
     args = parser.parse_args()
 
     region_code = aws_common.region_code_by_name[args.region]
@@ -29,8 +23,4 @@ if __name__ == '__main__':
     instance = aws_common.get_instance(ec2=ec2, name=args.name)
     instance_id = instance['InstanceId']
     print(instance_id)
-    ec2.start_instances(InstanceIds=[instance_id])
-    print('Instance starting')
-
-    if args.init:
-        aws_init.init(profile=args.profile, region=args.region, name=args.name)
+    ec2.stop_instances(InstanceIds=[instance_id])
