@@ -47,5 +47,5 @@ if __name__ == '__main__':
     if args.dynamic_port:
         tunnel_str += f" -D {args.dynamic_port}"
     print(
-        f'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no {tunnel_str} "'
-        f'-i {key_path} ubuntu@{instance_ip}')
+        f"ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no {tunnel_str} "
+        f"-i {key_path} ubuntu@{instance_ip}")

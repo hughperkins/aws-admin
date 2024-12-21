@@ -5,7 +5,8 @@ scriptname=$(basename $0)
 
 cd ${scriptdir}
 
-if cmd=$(PYTHON=. python ${scriptdir}/${scriptname}.py "$@"); then {
+if cmd=$(python -m aws_admin.aws_ssh "$@"
+); then {
     echo ${cmd}
     ${cmd}
 } else {
