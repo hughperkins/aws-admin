@@ -13,7 +13,7 @@ yaml = YAML()
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--profile', default=os.environ.get('AWS_PROFILE', 'default'))
-    parser.add_argument('--region', default=os.environ.get('AWS_REGION', 'virginia'))
+    parser.add_argument('--region', '-r', default=os.environ.get('AWS_REGION', 'virginia'))
     parser.add_argument('--tunnel-ports', '-t', type=int, nargs='+')
     parser.add_argument('--dynamic-port', '-d', type=int)
     parser.add_argument('--name', type=str, required=True)
