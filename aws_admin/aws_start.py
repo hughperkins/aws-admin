@@ -9,8 +9,8 @@ from aws_admin import aws_common, aws_init
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--profile', default=os.environ.get('AWS_PROFILE', 'default'))
-    parser.add_argument('--region', default=os.environ.get('AWS_REGION', 'virginia'))
-    parser.add_argument('--name', type=str, required=True)
+    parser.add_argument('--region', '-r', default=os.environ.get('AWS_REGION', 'virginia'))
+    parser.add_argument('--name', '-n', type=str, required=True)
     parser.add_argument('--init', action='store_true')
     args = parser.parse_args()
 

@@ -9,8 +9,8 @@ from aws_admin import aws_common
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--profile', default=os.environ.get('AWS_PROFILE', 'default'))
-    parser.add_argument('--region', default=os.environ.get('AWS_REGION', 'virginia'))
-    parser.add_argument('--name', required=True)
+    parser.add_argument('--region', '-r', default=os.environ.get('AWS_REGION', 'virginia'))
+    parser.add_argument('--name', '-n', required=True)
     args = parser.parse_args()
 
     region_code = aws_common.region_code_by_name[args.region]
