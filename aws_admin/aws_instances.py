@@ -23,7 +23,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--profile', default=os.environ.get('AWS_PROFILE', config['profile']))
-    parser.add_argument('--region', default=os.environ.get('AWS_REGION', config['default-region']))
+    parser.add_argument('--region', '-r', default=os.environ.get('AWS_REGION', config['default-region']))
     parser.add_argument('--prefix', default=os.environ.get('AWS_PREFIX', ''))
     args = parser.parse_args()
 
