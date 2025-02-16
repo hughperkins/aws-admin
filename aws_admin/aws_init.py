@@ -44,21 +44,9 @@ def init(profile: str, region: str, name: str):
     instance_ip = instance['PublicIpAddress']
     print('got public ip', instance_ip)
 
-    connected = False
-    while not connected:
-        try:
-            socket.create_connection((instance_ip, 22), timeout=1)
-            connected = True
-        except socket.timeout as e:
-            print('.', end='', flush=True)
-            time.sleep(1)
-        except ConnectionRefusedError as e:
-            print('.', end='', flush=True)
-            time.sleep(1)
-    print('')
+    aws_common.wait_instance_up(instance_ip)
 
     key_path = config['key_path']
-    instance_id = instance['InstanceId']
     instance_ip = instance['PublicIpAddress']
     nfs_ip = config['nfs_ip']
 
