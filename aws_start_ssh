@@ -1,0 +1,13 @@
+#!/bin/bash
+
+scriptdir=$(dirname $0)
+
+cd ${scriptdir}
+
+if cmd=$(python -m aws_admin.aws_start_ssh "$@"
+); then {
+    echo ${cmd}
+    ${cmd}
+} else {
+    echo ${cmd}
+} fi
