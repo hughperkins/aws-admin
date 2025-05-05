@@ -48,7 +48,7 @@ if __name__ == '__main__':
         for instance in reserv['Instances']:
             if instance['State']['Name'] == 'terminated':
                 continue
-            name = get_tag(instance['Tags'], 'Name')
+            name = get_tag(instance.get('Tags', []), 'Name')
             if name is None:
                 name = instance['InstanceId']
             instance_by_name[name] = instance
