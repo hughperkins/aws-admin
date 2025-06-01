@@ -37,6 +37,7 @@ if __name__ == '__main__':
         'Name'.ljust(18) +
         'State'.ljust(10) +
         'Type'.ljust(16) +
+        'PublicIp'.ljust(14) +
         # instance.get('PublicIpAddress', '').ljust(14) +
         # instance.get('PrivateIpAddress', '').ljust(14)
         '')
@@ -66,7 +67,7 @@ if __name__ == '__main__':
                     color + name.ljust(18) + Fore.RESET +
                     color + instance['State']['Name'].ljust(10) + Fore.RESET +
                     instance.get('InstanceType', '').ljust(16) +
-                    # instance.get('PublicIpAddress', '').ljust(14) +
+                    instance.get('PublicIpAddress', '').ljust(14) +
                     # instance.get('PrivateIpAddress', '').ljust(14)
                     '')
                 # outstr += color + instance['State']['Name'] + Fore.RESET
